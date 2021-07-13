@@ -6,3 +6,4 @@ Start working with your previously built front end code from Sprint 11.
 All authorization, registration and token requests must go through to the server running on [https://register.nomoreparties.co](https://register.nomoreparties.co/).
 
 Good luck!
+sdfghjkl
