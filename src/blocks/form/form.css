@@ -7,6 +7,11 @@
 @import url(./__field-error/_active/form__field-error_active.css);
 @import url(./__save-button/_disabled/form__save-button_disabled.css);
 @import url(./__title/_delete/form__title_delete.css);
+@import url(./__image/form__image.css);
+@import url(./__link/form__link.css);
+
+@import url(./__field/_dark/form__field_dark.css);
+@import url(./__save-button/_light/form__save-button_light.css);
 
 .form {
   width: 430px;

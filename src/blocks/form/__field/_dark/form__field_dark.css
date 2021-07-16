@@ -1,0 +1,10 @@
+.form__field_dark {
+  background-color: black;
+  color: lightgray;
+  border-bottom: white solid 1px;
+}
+
+.form__field_dark:focus {
+  background-color: black;
+
+}

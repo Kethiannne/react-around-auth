@@ -1,0 +1,7 @@
+.form_dark {
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  align-items: center;
+  margin: 0 auto 75px;
+}
