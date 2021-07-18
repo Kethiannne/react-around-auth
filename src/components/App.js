@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Switch, Redirect,  } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
@@ -12,9 +12,10 @@ import DeleteCardConfirmPopup from './DeleteCardConfirmPopup';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
+import { checkToken } from '../auth';
 
 
-function App() {
+function App(props) {
   // A Section For States
   //-----------------------------------------------------------------
   const [cards, setCards] = React.useState([]);
@@ -95,12 +96,9 @@ function App() {
     setDidSucceed(boolean);
   }
 
-  function handleLoginSubmit(){
-    setLoggedIn(true);
-  }
-
   function handleLogout(){
     setLoggedIn(false);
+    localStorage.removeItem('jwt');
   }
   //-----------------------------------------------------------------
 
@@ -109,12 +107,21 @@ function App() {
 
   // A Call for Checking User Token
   React.useEffect(()=>{
-    handleTokenCheck();
-  })
+    const jwt = localStorage.getItem('jwt');
+    let history = props.history;
 
-  const handleTokenCheck = () => {
-    //build this later!!!
-  }
+    if (jwt) {
+      checkToken(jwt)
+        .then(res => {
+          console.log(res);
+          return res
+        })
+        .then(res => {
+          history.push('/main-view');
+        })
+    }
+
+  }, [])
 
   // A Call for Initial Cards
   React.useEffect(()=>{
@@ -189,22 +196,27 @@ function App() {
         <BrowserRouter>
           <Switch>
             <ProtectedRoute exact path='/main-view'
-                cards={cards}
-                component={Main}
-                isloggedIn={loggedIn}
-                onAddClick={handleAddOpen}
-                onAvatarClick={handleAvatarOpen}
-                onCardClick={handleCardClick}
-                onCardLike={handleCardLike}
-                onDeleteClick={handleDeleteClick}
-                onEditClick={handleEditOpen}
-                onLogoutClick={handleLogout}
+              cards={cards}
+              component={Main}
+              isloggedIn={loggedIn}
+              onAddClick={handleAddOpen}
+              onAvatarClick={handleAvatarOpen}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onDeleteClick={handleDeleteClick}
+              onEditClick={handleEditOpen}
+              onLogoutClick={handleLogout}
             />
             <Route path='/signup' isloggedIn={loggedIn} >
-              <Register setDidSucceed={handleDidSucceed} setIsToolTipOpen={setIsToolTipOpen} isOpen={isToolTipOpen} didSucceed={didSucceed} onClose={closeAllPopups}/>
+              <Register
+                setDidSucceed={handleDidSucceed}
+                setIsToolTipOpen={setIsToolTipOpen}
+                isOpen={isToolTipOpen} didSucceed={didSucceed}
+                onClose={closeAllPopups}
+              />
             </Route>
             <Route path='/signin' isloggedIn={loggedIn}>
-              <Login onSubmit={handleLoginSubmit} />
+              <Login setLoggedIn={setLoggedIn} />
             </Route>
             <Route path='*'>
               {loggedIn ? <Redirect to="/main-view" /> : <Redirect to="/signin" />}
@@ -223,4 +235,4 @@ function App() {
 
 }
 
-export default App;
+export default withRouter(App);

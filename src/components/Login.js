@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Header from './Header';
+import { authorize } from '../auth';
 
 
 export default function Login (props) {
-
+  let history = useHistory();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -15,10 +16,17 @@ export default function Login (props) {
   function handleSubmit(evt){
     evt.preventDefault();
 
-    props.onSubmit({
-      email: email,
-      password: password
-    })
+    authorize(email, password)
+      .then((data)=>{
+         data.message ? props.setLoggedIn(false) : props.setLoggedIn(true)
+      })
+      .then(()=>{
+        setEmail('');
+        setPassword('');
+      })
+      .then(()=>{
+        history.push('/main-view')
+      })
   }
   return (
     <main>
@@ -34,7 +42,7 @@ export default function Login (props) {
 
         <input name="password" value={password} onChange={handleChange} type="password" required className="form__field form__field_dark"
           placeholder="Password" minLength={2} maxLength={200} />
-        <button type="submit" className="form__save-button form__save-button_light button-hover">
+        <button type="submit" onClick={handleSubmit} className="form__save-button form__save-button_light button-hover">
           Log in
         </button>
         <Link to={'/signup'} className=' button__hover form__link ' > Not a member yet? Sign up here! </Link>

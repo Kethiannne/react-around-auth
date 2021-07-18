@@ -21,6 +21,10 @@ export default function Register (props) {
       .then(()=>{
         props.setIsToolTipOpen(true);
       })
+      .then(()=>{
+        setEmail('');
+        setPassword('');
+      })
   }
 
 

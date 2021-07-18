@@ -13,35 +13,35 @@ export default function Main (props) {
     <main>
       <Header>
         <nav className='header__nav'>
-          <p>{props.email}</p>
-          <Link className='header__link button__hover' onClick={ console.log(props.email)}>Log out</Link>
+          <p>{ 'email to go here soon' }</p>
+          <Link to='/#' className='header__link button__hover' onClick={ props.onLogoutClick }>Log out</Link>
         </nav>
       </Header>
       <section className="profile">
         <div className="profile__avatar-wrapper">
-          <button type="button" className="profile__image-edit" onClick={props.onAvatarClick}>
+          <button type="button" className="profile__image-edit" onClick={ props.onAvatarClick }>
           </button>
-          <img src={`${currentUser.avatar}`} className="profile__avatar" alt={`${currentUser.name}`} />
+          <img src={ `${ currentUser.avatar }` } className="profile__avatar" alt={`${ currentUser.name }`} />
         </div>
         <div className="profile__profile-info">
           <h1 className="profile__name">
-            {currentUser.name}
+            { currentUser.name }
           </h1>
           <button className="profile__edit-button button-hover" type="button"
-            aria-label="Edit Profile" onClick={props.onEditClick}>
+            aria-label="Edit Profile" onClick={ props.onEditClick }>
           </button>
           <p className="profile__occupation">
-            {currentUser.about}
+            { currentUser.about }
           </p>
         </div>
         <button className="profile__add-button button-hover" type="button"
-          aria-label="Add Picture" onClick={props.onAddClick}>
+          aria-label="Add Picture" onClick={ props.onAddClick }>
         </button>
       </section>
 
       <section className="elements card-container">
 
-        {props.cards.map((card) =>
+        { props.cards.map((card) =>
             {
               return (<Card
                         key={card._id}

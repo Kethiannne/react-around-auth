@@ -10,8 +10,8 @@ export const register = (email, password) => {
     },
     body: JSON.stringify({password, email})
   })
-  .then((response) => {
-    return response.json();
+  .then((res) => {
+    return res.json();
   })
   .then((res) => {
     console.log(res);
@@ -36,11 +36,12 @@ export const authorize = (email, password) => {
   .then((res => res.json()))
   .then((data) => {
     console.log(data);
-    if (data.user){
-      localStorage.setItem('jwt', data.jwt);
+    if (data.token){
+      localStorage.setItem('jwt', data.token);
 
       return data;
     }
+    return data
   })
   .catch(err => console.log(err))
 };
@@ -48,16 +49,15 @@ export const authorize = (email, password) => {
 
 
 
-// // check the user's token
-// export const checkToken = (token) => {
-//   return fetch(`${BASE_URL}/users/me`, {
-//     method: 'GET',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json',
-//       'Authorization': `Bearer ${token}`,
-//     }
-//   })
-//   .then(res => res.json())
-//   .then(data => data)
-// }
+// check the user's token
+export const checkToken = (token) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => res.json())
+  .then(data => data)
+}
