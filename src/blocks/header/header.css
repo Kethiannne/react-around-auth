@@ -1,8 +1,12 @@
 @import url(./__logo/header__logo.css);
+@import url(./__nav/header__nav.css);
+@import url(./__link/header__link.css);
 
 .header {
   margin: 0 auto 40px;
   max-width: inherit;
   border-bottom: 1px solid rgba(84, 84, 84, .7);
-  padding:45px 0 41px;
+  padding: 30px 0 25px;
+  display: flex;
+  flex-direction: row;
 }

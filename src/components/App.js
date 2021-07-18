@@ -1,6 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom';
-import Header from './Header';
+import { BrowserRouter, Route, Switch, Redirect,  } from 'react-router-dom';
 import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
@@ -13,23 +12,23 @@ import DeleteCardConfirmPopup from './DeleteCardConfirmPopup';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
-import InfoToolTip from './InfoToolTip';
-import * as Auth from '../auth';
+
 
 function App() {
   // A Section For States
   //-----------------------------------------------------------------
   const [cards, setCards] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
-  const [didSucceed, setdidSucceed] = React.useState(true);
+  const [didSucceed, setDidSucceed] = React.useState(false);
   const [forDeletion, setForDeletion] = React.useState();
   const [isAddOpen, setIsAddOpen] = React.useState(false);
   const [isAvaterOpen, setIsAvatarOpen] = React.useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
   const [isEditOpen, setIsEditOpen] = React.useState(false);
   const [isToolTipOpen, setIsToolTipOpen] = React.useState(false);
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(true);
   const [selectedCard, setSelectedCard] = React.useState({});
+
   //-----------------------------------------------------------------
 
   // A Section for Opening and Closing Popups
@@ -50,11 +49,6 @@ function App() {
     setIsDeleteOpen(true);
     setForDeletion(id);
   }
-
-  // experimental stuff
-    function handleToolTipOpen(){
-      setIsToolTipOpen(true);
-    }
 
   function closeAllPopups(){
     setIsAddOpen(false);
@@ -97,8 +91,8 @@ function App() {
       })
   }
 
-  function handleRegisterSubmit(){
-    setIsToolTipOpen(true);
+  function handleDidSucceed(boolean) {
+    setDidSucceed(boolean);
   }
 
   function handleLoginSubmit(){
@@ -193,14 +187,8 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__wrapper">
         <BrowserRouter>
-
           <Switch>
-            <ProtectedRoute exact path='/main-view'>
-              <Header>
-                <p>{currentUser.email}</p>
-                <Link onClick={handleLogout()}>Logout</Link>
-              </Header>
-              <Main
+            <ProtectedRoute exact path='/main-view'
                 cards={cards}
                 component={Main}
                 isloggedIn={loggedIn}
@@ -210,13 +198,11 @@ function App() {
                 onCardLike={handleCardLike}
                 onDeleteClick={handleDeleteClick}
                 onEditClick={handleEditOpen}
-              />
-            </ProtectedRoute>
-
+                onLogoutClick={handleLogout}
+            />
             <Route path='/signup' isloggedIn={loggedIn} >
-              <Register onSubmit={handleRegisterSubmit} />
+              <Register setDidSucceed={handleDidSucceed} setIsToolTipOpen={setIsToolTipOpen} isOpen={isToolTipOpen} didSucceed={didSucceed} onClose={closeAllPopups}/>
             </Route>
-
             <Route path='/signin' isloggedIn={loggedIn}>
               <Login onSubmit={handleLoginSubmit} />
             </Route>
@@ -224,7 +210,6 @@ function App() {
               {loggedIn ? <Redirect to="/main-view" /> : <Redirect to="/signin" />}
             </Route>
           </Switch>
-
         </BrowserRouter>
         <Footer />
         <ImagePopup onClose={closeAllPopups} card={selectedCard} />
@@ -232,9 +217,6 @@ function App() {
         <EditAvatarPopup isOpen={isAvaterOpen} onClose={closeAllPopups} onSubmit={handleUpdateAvatar} />
         <EditProfilePopup isOpen={isEditOpen} onClose={closeAllPopups} onSubmit={handleUpdateUser} />
         <DeleteCardConfirmPopup isOpen={isDeleteOpen} onClose={closeAllPopups} onSubmit={handleCardDelete} />
-        <InfoToolTip isOpen={isToolTipOpen} didSucceed={didSucceed} onClose={closeAllPopups}
-          handleError={setIsToolTipOpen} handleErrors={setdidSucceed} handleIt={handleToolTipOpen}
-        />
       </div>
     </CurrentUserContext.Provider>
   );

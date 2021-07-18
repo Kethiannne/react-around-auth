@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Header from './Header';
+
 
 export default function Login (props) {
 
@@ -19,17 +21,24 @@ export default function Login (props) {
     })
   }
   return (
-    <div className='form form_dark'>
-      <h2 style={{color: 'white'}} > Log in </h2>
-      <input name="email" value={email} onChange={handleChange} type="email" required className="form__field form__field_dark"
-        placeholder="Email" minLength={2} maxLength={40} />
+    <main>
+      <Header>
+        <nav className='header__nav'>
+          <Link className='header__link button__hover' to={ '/signup' } >Sign up</Link>
+        </nav>
+      </Header>
+      <div className='form form_dark'>
+        <h2> Log in </h2>
+        <input name="email" value={email} onChange={handleChange} type="email" required className="form__field form__field_dark"
+          placeholder="Email" minLength={2} maxLength={40} />
 
-      <input name="password" value={password} onChange={handleChange} type="password" required className="form__field form__field_dark"
-        placeholder="Password" minLength={2} maxLength={200} />
-      <button type="submit" className="form__save-button form__save-button_light button-hover">
-        Log in
-      </button>
-      <Link to={'/signup'} className='form__link' > Not a member yet? Sign up here! </Link>
-    </div>
+        <input name="password" value={password} onChange={handleChange} type="password" required className="form__field form__field_dark"
+          placeholder="Password" minLength={2} maxLength={200} />
+        <button type="submit" className="form__save-button form__save-button_light button-hover">
+          Log in
+        </button>
+        <Link to={'/signup'} className=' button__hover form__link ' > Not a member yet? Sign up here! </Link>
+      </div>
+    </main>
   )
 }

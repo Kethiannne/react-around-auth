@@ -1,7 +1,14 @@
 import successImg from '../images/icons/success.png';
 import failureImg from '../images/icons/failure.png';
+import { useHistory } from 'react-router';
 
 export default function InfoToolTip (props) {
+  const history = useHistory();
+
+  const close = () => {
+    props.onClose();
+    if(props.didSucceed) {history.push('/signin');}
+  }
 
   const success = () => {
     return (
@@ -30,13 +37,13 @@ export default function InfoToolTip (props) {
     <div className= {`popup popup_InfoToolTip ${props.isOpen ? `popup_opened` : ``}`}
       onClick={(evt)=>{
         if (evt.target === evt.currentTarget){
-          props.onClose()
+          close()
         }
       }}
     >
       <div className={`popup__wrapper`} >
         <button className="popup__close-button button-hover" type="button"
-          aria-label="Close" onClick={props.onClose}>
+          aria-label="Close" onClick={close}>
         </button>
 
         {props.didSucceed ? success() : failure()}
