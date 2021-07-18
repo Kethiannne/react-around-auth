@@ -30,6 +30,7 @@ function App(props) {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [email, setEmail] = React.useState('');
+  const [doneChecking, setDoneChecking] = React.useState(false)
 
   //-----------------------------------------------------------------
 
@@ -108,24 +109,30 @@ function App(props) {
 
   // A Call for Checking User Token
   React.useEffect(()=>{
-    const jwt = localStorage.getItem('jwt');
     let history = props.history;
 
-    if (jwt) {
+    if (localStorage.getItem('jwt')) {
+      const jwt = localStorage.getItem('jwt');
+      console.log('jwt found');
       checkToken(jwt)
-        .then(res => {
+        .then(data => {
           setLoggedIn(true);
-          setEmail(res.data.email);
-        })
-        .then(() => {
+          console.log(data);
+          setEmail(data.email);
           history.push('/');
+        })
+        .then(()=>{
+          setDoneChecking(true);
         })
         .catch(err => {
           console.log((`jwt checker broken: ${ err }`))
         })
+    } else {
+      console.log('no jwt found');
+      setDoneChecking(true);
     }
 
-  })
+  }, [])
 
   // A Call for Initial Cards
   React.useEffect(()=>{
@@ -193,7 +200,7 @@ function App(props) {
   }
 
   //-----------------------------------------------------------------
-
+  if (!doneChecking) {return <div></div>}
   return (
     <CurrentUserContext.Provider value={ currentUser }>
       <div className="page__wrapper">
