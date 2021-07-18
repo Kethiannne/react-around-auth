@@ -13,7 +13,7 @@ export default function Main (props) {
     <main>
       <Header>
         <nav className='header__nav'>
-          <p>{ 'email to go here soon' }</p>
+          <p>{ props.email }</p>
           <Link to='/#' className='header__link button__hover' onClick={ props.onLogoutClick }>Log out</Link>
         </nav>
       </Header>
@@ -44,11 +44,11 @@ export default function Main (props) {
         { props.cards.map((card) =>
             {
               return (<Card
-                        key={card._id}
-                        {...card}
-                        onCardClick={props.onCardClick}
-                        onCardLike={props.onCardLike}
-                        onDeleteClick={props.onDeleteClick}
+                        key= { card._id }
+                        {...card }
+                        onCardClick={ props.onCardClick }
+                        onCardLike={ props.onCardLike }
+                        onDeleteClick={ props.onDeleteClick }
                       />)
             })
         }

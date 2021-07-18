@@ -20,9 +20,6 @@ export const register = (email, password) => {
   .catch((err) => console.log(`this is an error:${err}`));
 };
 
-// email: "nimblefizzle@gmail.com"
-// _id: "60f39a8519370e0013efd5d1"
-
 
 // Logging in / authorization
 export const authorize = (email, password) => {

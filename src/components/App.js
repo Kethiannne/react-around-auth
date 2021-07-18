@@ -27,8 +27,9 @@ function App(props) {
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
   const [isEditOpen, setIsEditOpen] = React.useState(false);
   const [isToolTipOpen, setIsToolTipOpen] = React.useState(false);
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
+  const [email, setEmail] = React.useState('');
 
   //-----------------------------------------------------------------
 
@@ -113,11 +114,18 @@ function App(props) {
     if (jwt) {
       checkToken(jwt)
         .then(res => {
-          console.log(res);
+          setLoggedIn(true);
           return res
         })
         .then(res => {
+          console.log(loggedIn);
+          setEmail(res.data.email);
+        })
+        .then(() => {
           history.push('/main-view');
+        })
+        .catch(err => {
+          console.log((`jwt checker broken: ${err}`))
         })
     }
 
@@ -158,7 +166,7 @@ function App(props) {
 
     function handleFalse(id) {
       api.updateLikeTrue(id)
-        .then((newCard) => {afterBoolean(newCard)})
+        .then((newCard) => { afterBoolean(newCard) })
         .catch(err => {
           console.log((`Like Functions Broken: ${err}`))
         })
@@ -168,7 +176,7 @@ function App(props) {
       api.updateLikeFalse(id)
         .then((newCard) => {afterBoolean(newCard)})
         .catch(err => {
-          console.log((`Like Functions Broken: ${err}`))
+          console.log((`Like Functions Broken: ${ err }`))
         })
     }
 
@@ -184,51 +192,52 @@ function App(props) {
         closeAllPopups();
       })
       .catch(err => {
-        console.log((`Card Refuses to Leave Peacefully: ${err}`))
+        console.log((`Card Refuses to Leave Peacefully: ${ err }`))
       })
   }
 
   //-----------------------------------------------------------------
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={ currentUser }>
       <div className="page__wrapper">
         <BrowserRouter>
           <Switch>
             <ProtectedRoute exact path='/main-view'
-              cards={cards}
-              component={Main}
-              isloggedIn={loggedIn}
-              onAddClick={handleAddOpen}
-              onAvatarClick={handleAvatarOpen}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onDeleteClick={handleDeleteClick}
-              onEditClick={handleEditOpen}
-              onLogoutClick={handleLogout}
+              cards={ cards }
+              component={ Main }
+              isloggedIn={ loggedIn }
+              onAddClick={ handleAddOpen }
+              onAvatarClick={ handleAvatarOpen }
+              onCardClick={ handleCardClick }
+              onCardLike={ handleCardLike }
+              onDeleteClick={ handleDeleteClick }
+              onEditClick={ handleEditOpen }
+              onLogoutClick={ handleLogout }
+              email={ email }
             />
-            <Route path='/signup' isloggedIn={loggedIn} >
+            <Route path='/signup' isloggedIn={ loggedIn } >
               <Register
-                setDidSucceed={handleDidSucceed}
-                setIsToolTipOpen={setIsToolTipOpen}
-                isOpen={isToolTipOpen} didSucceed={didSucceed}
-                onClose={closeAllPopups}
+                setDidSucceed={ handleDidSucceed }
+                setIsToolTipOpen={ setIsToolTipOpen }
+                isOpen={ isToolTipOpen } didSucceed={ didSucceed }
+                onClose={ closeAllPopups }
               />
             </Route>
-            <Route path='/signin' isloggedIn={loggedIn}>
-              <Login setLoggedIn={setLoggedIn} />
+            <Route path='/signin' isloggedIn={ loggedIn }>
+              <Login setLoggedIn={ setLoggedIn } />
             </Route>
             <Route path='*'>
-              {loggedIn ? <Redirect to="/main-view" /> : <Redirect to="/signin" />}
+              { loggedIn ? <Redirect to="/main-view" /> : <Redirect to="/signin" /> }
             </Route>
           </Switch>
         </BrowserRouter>
         <Footer />
-        <ImagePopup onClose={closeAllPopups} card={selectedCard} />
-        <AddPlacePopup isOpen={isAddOpen} onClose={closeAllPopups} onSubmit={handleAddPlaceSubmit} />
-        <EditAvatarPopup isOpen={isAvaterOpen} onClose={closeAllPopups} onSubmit={handleUpdateAvatar} />
-        <EditProfilePopup isOpen={isEditOpen} onClose={closeAllPopups} onSubmit={handleUpdateUser} />
-        <DeleteCardConfirmPopup isOpen={isDeleteOpen} onClose={closeAllPopups} onSubmit={handleCardDelete} />
+        <ImagePopup onClose={ closeAllPopups } card={ selectedCard } />
+        <AddPlacePopup isOpen={ isAddOpen } onClose={ closeAllPopups } onSubmit={ handleAddPlaceSubmit } />
+        <EditAvatarPopup isOpen={ isAvaterOpen } onClose={ closeAllPopups } onSubmit={ handleUpdateAvatar } />
+        <EditProfilePopup isOpen={ isEditOpen } onClose={ closeAllPopups } onSubmit={ handleUpdateUser } />
+        <DeleteCardConfirmPopup isOpen={ isDeleteOpen } onClose={ closeAllPopups } onSubmit={ handleCardDelete } />
       </div>
     </CurrentUserContext.Provider>
   );
