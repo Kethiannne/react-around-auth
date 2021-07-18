@@ -37,15 +37,15 @@ export default function Login (props) {
       </Header>
       <div className='form form_dark'>
         <h2> Log in </h2>
-        <input name="email" value={email} onChange={handleChange} type="email" required className="form__field form__field_dark"
-          placeholder="Email" minLength={2} maxLength={40} />
+        <input name="email" value={ email } onChange={ handleChange } type="email" required className="form__field form__field_dark"
+          placeholder="Email" minLength={ 2 } maxLength={ 40 } />
 
-        <input name="password" value={password} onChange={handleChange} type="password" required className="form__field form__field_dark"
-          placeholder="Password" minLength={2} maxLength={200} />
-        <button type="submit" onClick={handleSubmit} className="form__save-button form__save-button_light button-hover">
+        <input name="password" value={ password } onChange={ handleChange } type="password" required className="form__field form__field_dark"
+          placeholder="Password" minLength={ 2 } maxLength={ 200 } />
+        <button type="submit" onClick={ handleSubmit } className="form__save-button form__save-button_light button-hover">
           Log in
         </button>
-        <Link to={'/signup'} className=' button__hover form__link ' > Not a member yet? Sign up here! </Link>
+        <Link to={ '/signup' } className=' button__hover form__link ' > Not a member yet? Sign up here! </Link>
       </div>
     </main>
   )

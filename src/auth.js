@@ -17,7 +17,7 @@ export const register = (email, password) => {
     console.log(res);
     return res;
   })
-  .catch((err) => console.log(`this is an error:${err}`));
+  .catch((err) => console.log(`this is an error with registering: ${ err }`));
 };
 
 
@@ -28,7 +28,7 @@ export const authorize = (email, password) => {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ password, email})
+    body: JSON.stringify({ password, email })
   })
   .then((res => res.json()))
   .then((data) => {
@@ -38,7 +38,6 @@ export const authorize = (email, password) => {
 
       return data;
     }
-    return data
   })
   .catch(err => console.log(err))
 };
@@ -52,7 +51,7 @@ export const checkToken = (token) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${ token }`,
     }
   })
   .then(res => res.json())

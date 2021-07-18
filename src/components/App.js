@@ -115,21 +115,17 @@ function App(props) {
       checkToken(jwt)
         .then(res => {
           setLoggedIn(true);
-          return res
-        })
-        .then(res => {
-          console.log(loggedIn);
           setEmail(res.data.email);
         })
         .then(() => {
-          history.push('/main-view');
+          history.push('/');
         })
         .catch(err => {
-          console.log((`jwt checker broken: ${err}`))
+          console.log((`jwt checker broken: ${ err }`))
         })
     }
 
-  }, [])
+  })
 
   // A Call for Initial Cards
   React.useEffect(()=>{
@@ -138,7 +134,7 @@ function App(props) {
         setCards(res);
       })
       .catch(err => {
-        console.log((`Cards could not be delivered as dialed: ${err}`))
+        console.log((`Cards could not be delivered as dialed: ${ err }`))
       })
   }, [])
 
@@ -149,7 +145,7 @@ function App(props) {
         setCurrentUser(res);
       })
       .catch(err => {
-        console.log((`User info not received properly: ${err}`));
+        console.log((`User info not received properly: ${ err }`));
       })
   }, [])
 
@@ -168,7 +164,7 @@ function App(props) {
       api.updateLikeTrue(id)
         .then((newCard) => { afterBoolean(newCard) })
         .catch(err => {
-          console.log((`Like Functions Broken: ${err}`))
+          console.log((`Like Functions Broken: ${ err }`))
         })
     }
 
@@ -203,10 +199,10 @@ function App(props) {
       <div className="page__wrapper">
         <BrowserRouter>
           <Switch>
-            <ProtectedRoute exact path='/main-view'
+            <ProtectedRoute exact path='/'
               cards={ cards }
               component={ Main }
-              isloggedIn={ loggedIn }
+              isLoggedIn={ loggedIn }
               onAddClick={ handleAddOpen }
               onAvatarClick={ handleAvatarOpen }
               onCardClick={ handleCardClick }
@@ -227,8 +223,8 @@ function App(props) {
             <Route path='/signin' isloggedIn={ loggedIn }>
               <Login setLoggedIn={ setLoggedIn } />
             </Route>
-            <Route path='*'>
-              { loggedIn ? <Redirect to="/main-view" /> : <Redirect to="/signin" /> }
+            <Route path='/*'>
+              { loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" /> }
             </Route>
           </Switch>
         </BrowserRouter>
