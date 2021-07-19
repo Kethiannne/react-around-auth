@@ -12,7 +12,7 @@ import DeleteCardConfirmPopup from './DeleteCardConfirmPopup';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
-import { checkToken } from '../auth';
+import { authorize, checkToken } from '../utils/auth';
 
 
 function App(props) {
@@ -31,6 +31,7 @@ function App(props) {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [email, setEmail] = React.useState('');
   const [doneChecking, setDoneChecking] = React.useState(false)
+  const history = props.history;
 
   //-----------------------------------------------------------------
 
@@ -71,6 +72,9 @@ function App(props) {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
+      .catch(err => {
+        console.log((`New Card not received properly: ${err}`));
+      })
   }
   function handleUpdateUser(values){
     api.updateUserInfo(values)
@@ -108,17 +112,15 @@ function App(props) {
   //-----------------------------------------------------------------
 
   // A Call for Checking User Token
-  React.useEffect(()=>{
-    let history = props.history;
-
+  React.useEffect(()=> {
     if (localStorage.getItem('jwt')) {
       const jwt = localStorage.getItem('jwt');
       console.log('jwt found');
       checkToken(jwt)
         .then(data => {
           setLoggedIn(true);
-          console.log(data);
-          setEmail(data.email);
+          console.log(data.data.email);
+          setEmail(data.data.email);
           history.push('/');
         })
         .then(()=>{
@@ -134,8 +136,23 @@ function App(props) {
 
   }, [])
 
+  function loginAuthorize(email, password) {
+    authorize(email, password)
+      .then((data) => {
+        console.log(data);
+        data.token ? setLoggedIn(true) : setLoggedIn(false);
+        history.push('/');
+      })
+      .then(() => {
+        console.log(loggedIn);
+      })
+      .catch(err => {
+        console.log((`Login Function Broken: ${ err }`))
+      })
+  }
+
   // A Call for Initial Cards
-  React.useEffect(()=>{
+  React.useEffect(() => {
     api.getInitialCards()
       .then((res) => {
         setCards(res);
@@ -228,7 +245,7 @@ function App(props) {
               />
             </Route>
             <Route path='/signin' isloggedIn={ loggedIn }>
-              <Login setLoggedIn={ setLoggedIn } />
+              <Login setLoggedIn={ setLoggedIn } onSubmit={ loginAuthorize } />
             </Route>
             <Route path='/*'>
               { loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" /> }

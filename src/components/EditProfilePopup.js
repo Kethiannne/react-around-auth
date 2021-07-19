@@ -37,10 +37,10 @@ export default function EditProfilePopup (props) {
     onSubmit={handleSubmit}
     >
     {/* Children Elements */}
-    <input name="name" value={name} onChange={handleChange} type="text" required className="form__field edit-form__name"
+    <input name="name" value={name || ''} onChange={handleChange} type="text" required className="form__field edit-form__name"
       placeholder="Name" minLength={2} maxLength={40} />
 
-    <input name="about" value={description} onChange={handleChange} type="text" required className="form__field edit-form__occupation"
+    <input name="about" value={description || ''} onChange={handleChange} type="text" required className="form__field edit-form__occupation"
       placeholder="Occupation" minLength={2} maxLength={200} />
     </PopupWithForm>
   )
