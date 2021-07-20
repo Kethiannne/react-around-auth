@@ -9,10 +9,11 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import DeleteCardConfirmPopup from './DeleteCardConfirmPopup';
+import InfoToolTip from './InfoToolTip';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
-import { authorize, checkToken } from '../utils/auth';
+import { authorize, checkToken, register } from '../utils/auth';
 
 
 function App(props) {
@@ -98,10 +99,6 @@ function App(props) {
       })
   }
 
-  function handleDidSucceed(boolean) {
-    setDidSucceed(boolean);
-  }
-
   function handleLogout(){
     setLoggedIn(false);
     localStorage.removeItem('jwt');
@@ -140,14 +137,29 @@ function App(props) {
     authorize(email, password)
       .then((data) => {
         console.log(data);
-        data.token ? setLoggedIn(true) : setLoggedIn(false);
-        history.push('/');
+        setLoggedIn(true);
       })
       .then(() => {
-        console.log(loggedIn);
+        history.push('/');
       })
       .catch(err => {
+        setLoggedIn(false)
         console.log((`Login Function Broken: ${ err }`))
+      })
+  }
+
+  function registerUser(email, password) {
+    register(email, password)
+      .then((res) => {
+        setDidSucceed(true);
+      })
+      .then(()=>{
+        setIsToolTipOpen(true);
+      })
+      .catch(err => {
+        setDidSucceed(false)
+        console.log((`Register Function Broken: ${ err }`))
+        setIsToolTipOpen(true);
       })
   }
 
@@ -237,11 +249,7 @@ function App(props) {
               email={ email }
             />
             <Route path='/signup' isloggedIn={ loggedIn } >
-              <Register
-                setDidSucceed={ handleDidSucceed }
-                setIsToolTipOpen={ setIsToolTipOpen }
-                isOpen={ isToolTipOpen } didSucceed={ didSucceed }
-                onClose={ closeAllPopups }
+              <Register registerUser={ registerUser }
               />
             </Route>
             <Route path='/signin' isloggedIn={ loggedIn }>
@@ -258,6 +266,7 @@ function App(props) {
         <EditAvatarPopup isOpen={ isAvaterOpen } onClose={ closeAllPopups } onSubmit={ handleUpdateAvatar } />
         <EditProfilePopup isOpen={ isEditOpen } onClose={ closeAllPopups } onSubmit={ handleUpdateUser } />
         <DeleteCardConfirmPopup isOpen={ isDeleteOpen } onClose={ closeAllPopups } onSubmit={ handleCardDelete } />
+        <InfoToolTip isOpen={ isToolTipOpen } didSucceed={ didSucceed } onClose={ closeAllPopups } />
       </div>
     </CurrentUserContext.Provider>
   );

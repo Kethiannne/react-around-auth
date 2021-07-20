@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
-import {register} from '../utils/auth';
-import InfoToolTip from './InfoToolTip';
 
 export default function Register (props) {
   const [email, setEmail] = React.useState('');
@@ -14,17 +12,8 @@ export default function Register (props) {
 
   function handleSubmit(evt){
     evt.preventDefault();
-    register(email, password)
-      .then((res) => {
-        res.message ? props.setDidSucceed(false) : props.setDidSucceed(true);
-      })
-      .then(()=>{
-        props.setIsToolTipOpen(true);
-      })
-      .then(()=>{
-        setEmail('');
-        setPassword('');
-      })
+    props.registerUser(email, password)
+
   }
 
 
@@ -35,7 +24,7 @@ export default function Register (props) {
           <Link className='header__link button__hover' to={ '/signin' } >Sign in</Link>
         </nav>
       </Header>
-      <form className='form form_dark' onSubmit={handleSubmit}>
+      <form className='form form_dark' onSubmit={ handleSubmit }>
         <h2> Sign up </h2>
         <input name="email" value={ email } onChange={ handleChange } type="email" required className="form__field form__field_dark"
           placeholder="Email" minLength={ 2 } maxLength={40} />
@@ -47,8 +36,6 @@ export default function Register (props) {
         </button>
         <Link to={ '/signin' } className='form__link' >Already a member? Log in here!</Link>
       </form>
-      <InfoToolTip isOpen={ props.isOpen } didSucceed={ props.didSucceed } onClose={ props.onClose } />
-
     </main>
   )
 }

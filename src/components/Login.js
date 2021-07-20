@@ -23,7 +23,7 @@ export default function Login (props) {
           <Link className='header__link button__hover' to={ '/signup' } >Sign up</Link>
         </nav>
       </Header>
-      <form className='form form_dark' onSubmit={handleSubmit}>
+      <form className='form form_dark' onSubmit={ handleSubmit }>
         <h2> Log in </h2>
         <input name="email" value={ email } onChange={ handleChange } type="email" required className="form__field form__field_dark"
           placeholder="Email" minLength={ 2 } maxLength={ 40 } />
