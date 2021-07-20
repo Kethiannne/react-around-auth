@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
@@ -131,7 +131,7 @@ function App(props) {
       setDoneChecking(true);
     }
 
-  }, [])
+  }, [loggedIn])
 
   function loginAuthorize(email, password) {
     authorize(email, password)
@@ -233,33 +233,31 @@ function App(props) {
   return (
     <CurrentUserContext.Provider value={ currentUser }>
       <div className="page__wrapper">
-        <BrowserRouter>
-          <Switch>
-            <ProtectedRoute exact path='/'
-              cards={ cards }
-              component={ Main }
-              isLoggedIn={ loggedIn }
-              onAddClick={ handleAddOpen }
-              onAvatarClick={ handleAvatarOpen }
-              onCardClick={ handleCardClick }
-              onCardLike={ handleCardLike }
-              onDeleteClick={ handleDeleteClick }
-              onEditClick={ handleEditOpen }
-              onLogoutClick={ handleLogout }
-              email={ email }
+        <Switch>
+          <ProtectedRoute exact path='/'
+            cards={ cards }
+            component={ Main }
+            isLoggedIn={ loggedIn }
+            onAddClick={ handleAddOpen }
+            onAvatarClick={ handleAvatarOpen }
+            onCardClick={ handleCardClick }
+            onCardLike={ handleCardLike }
+            onDeleteClick={ handleDeleteClick }
+            onEditClick={ handleEditOpen }
+            onLogoutClick={ handleLogout }
+            email={ email }
+          />
+          <Route path='/signup' isloggedIn={ loggedIn } >
+            <Register registerUser={ registerUser }
             />
-            <Route path='/signup' isloggedIn={ loggedIn } >
-              <Register registerUser={ registerUser }
-              />
-            </Route>
-            <Route path='/signin' isloggedIn={ loggedIn }>
-              <Login setLoggedIn={ setLoggedIn } onSubmit={ loginAuthorize } />
-            </Route>
-            <Route path='/*'>
-              { loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" /> }
-            </Route>
-          </Switch>
-        </BrowserRouter>
+          </Route>
+          <Route path='/signin' isloggedIn={ loggedIn }>
+            <Login setLoggedIn={ setLoggedIn } onSubmit={ loginAuthorize } />
+          </Route>
+          <Route path='/*'>
+            { loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" /> }
+          </Route>
+        </Switch>
         <Footer />
         <ImagePopup onClose={ closeAllPopups } card={ selectedCard } />
         <AddPlacePopup isOpen={ isAddOpen } onClose={ closeAllPopups } onSubmit={ handleAddPlaceSubmit } />
