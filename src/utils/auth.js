@@ -21,7 +21,6 @@ export const register = (email, password) => {
     return getSuccessfulReturn(res);
   })
   .then((res) => {
-    console.log(res);
     return res;
   })
 };
@@ -39,7 +38,6 @@ export const authorize = (email, password) => {
     return getSuccessfulReturn(res);
   })
   .then((data) => {
-    console.log(data);
     if (data.userToken){
       localStorage.setItem('jwt', data.userToken);
 

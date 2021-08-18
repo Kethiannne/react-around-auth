@@ -138,7 +138,6 @@ function App(props) {
   function loginAuthorize(email, password) {
     authorize(email, password)
       .then((data) => {
-        console.log(data);
         setLoggedIn(true);
       })
       .then(() => {
@@ -195,7 +194,6 @@ function App(props) {
 
     // Send a request to the API and getting the updated card data
     function afterBoolean(newCard) {
-      console.log(newCard);
       setCards((cards) => cards.map((c) => c._id === newCard._id ? newCard : c));
     }
 
@@ -222,7 +220,6 @@ function App(props) {
   function handleCardDelete(){
     api.deleteCard(jwt, forDeletion)
       .then(() => {
-        console.log('i did it!');
         setCards((cards) => cards.filter(card => card._id !== forDeletion))
         closeAllPopups();
       })
