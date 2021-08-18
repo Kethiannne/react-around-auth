@@ -14,18 +14,34 @@ class Api {
     }
   }
 
-  getInitialCards() {
+  _setJwtHeaders(jwt){
+    const bearer = 'Bearer ' + jwt;
+    if(jwt !== '') {
+      return {
+          authorization: bearer,
+          "Content-Type": "application/json"
+        }
+
+    }
+    return {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  }
+
+  getInitialCards(jwt) {
     return fetch(this._baseURL + `/cards`, {
-      headers: this._headers
+      headers: this._setJwtHeaders(jwt)
     })
       .then(res => {
         return this._getSuccessfulReturn(res);
       })
   }
 
-  addCard({link, name}){
+  addCard(jwt, {link, name}){
     return fetch(this._baseURL + `/cards`, {
-      headers: this._headers,
+      headers: this._setJwtHeaders(jwt),
       method: "POST",
       body: JSON.stringify({link, name})
     })
@@ -34,9 +50,9 @@ class Api {
       })
   }
 
-  deleteCard(id){
+  deleteCard(jwt, id){
     return fetch(this._baseURL + `/cards/` + id, {
-      headers: this._headers,
+      headers: this._setJwtHeaders(jwt),
       method: "DELETE",
     })
       .then(res => {
@@ -44,9 +60,9 @@ class Api {
       })
   }
 
-  updateLikeTrue(cardID){
+  updateLikeTrue(jwt, cardID){
     return fetch(this._baseURL + `/cards/likes/` + cardID, {
-      headers: this._headers,
+      headers: this._setJwtHeaders(jwt),
       method: "PUT",
     })
       .then(res => {
@@ -54,9 +70,9 @@ class Api {
       })
   }
 
-  updateLikeFalse(cardID){
+  updateLikeFalse(jwt, cardID){
     return fetch(this._baseURL + `/cards/likes/` + cardID, {
-      headers: this._headers,
+      headers: this._setJwtHeaders(jwt),
       method: "DELETE",
     })
       .then(res => {
@@ -64,19 +80,19 @@ class Api {
       })
   }
 
-  getUserInfo(){
+  getUserInfo(jwt){
     return fetch(this._baseURL + `/users/me`, {
-      headers: this._headers
+      headers: this._setJwtHeaders(jwt)
     })
       .then(res => {
         return this._getSuccessfulReturn(res);
       })
   }
 
-  updateUserInfo(values){
+  updateUserInfo(jwt, values){
     return fetch(this._baseURL + `/users/me`,
     {
-      headers: this._headers,
+      headers: this._setJwtHeaders(jwt),
       method:"PATCH",
       body: JSON.stringify(values)
     })
@@ -85,10 +101,10 @@ class Api {
       })
   }
 
-  updateAvatar(link){
+  updateAvatar(jwt, link){
     return fetch(this._baseURL + `/users/me/avatar`,
     {
-    headers: this._headers,
+    headers: this._setJwtHeaders(jwt),
     method:"PATCH",
     body: JSON.stringify(link)
     })
@@ -99,9 +115,5 @@ class Api {
 }
 
 export default new Api({
-  baseURL: "https://around.nomoreparties.co/v1/group-7",
-  headers: {
-    authorization: "a5454f22-eab5-4384-8e26-57b127f56551",
-    "Content-Type": "application/json"
-  }
+  baseURL: process.env.NODE_ENV === "production" ? 'https://api.kethianne.students.nomoreparties.site' : 'http://localhost:3000',
 });

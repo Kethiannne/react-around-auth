@@ -4,7 +4,7 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 export default function Card(props) {
   const currentUser = React.useContext(CurrentUserContext);
   const isOwn = props.owner._id === currentUser._id;
-  const isLiked = props.likes.some(i => i._id === currentUser._id);
+  const isLiked = props.likes.some(i => i === currentUser._id);
 
   const cardLikeButtonClassName = (
     `button-hover elements__heart ${isLiked ? `elements__heart_active` : ``}`

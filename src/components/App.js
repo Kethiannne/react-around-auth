@@ -32,6 +32,7 @@ function App(props) {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [email, setEmail] = React.useState('');
   const [doneChecking, setDoneChecking] = React.useState(false)
+  const [jwt, setJwt] = React.useState('');
   const history = props.history;
 
   //-----------------------------------------------------------------
@@ -68,19 +69,20 @@ function App(props) {
   // A Section for Submit Handlers
   //-----------------------------------------------------------------
   function handleAddPlaceSubmit({link, name}){
-    api.addCard({link, name})
+    api.addCard(jwt, {link, name})
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        setCards([...cards, newCard.data]);
         closeAllPopups();
       })
       .catch(err => {
         console.log((`New Card not received properly: ${err}`));
       })
   }
+
   function handleUpdateUser(values){
-    api.updateUserInfo(values)
+    api.updateUserInfo(jwt, values)
       .then((newUserInfo) => {
-        setCurrentUser(newUserInfo);
+        setCurrentUser(newUserInfo.user);
         closeAllPopups();
       })
       .catch(err => {
@@ -89,9 +91,9 @@ function App(props) {
   }
 
   function handleUpdateAvatar(url){
-    api.updateAvatar(url)
+    api.updateAvatar(jwt, url)
       .then((newUserInfo) => {
-        setCurrentUser(newUserInfo);
+        setCurrentUser(newUserInfo.user);
         closeAllPopups();
       })
       .catch(err => {
@@ -101,6 +103,7 @@ function App(props) {
 
   function handleLogout(){
     setLoggedIn(false);
+    setJwt('');
     localStorage.removeItem('jwt');
   }
   //-----------------------------------------------------------------
@@ -111,13 +114,12 @@ function App(props) {
   // A Call for Checking User Token
   React.useEffect(()=> {
     if (localStorage.getItem('jwt')) {
-      const jwt = localStorage.getItem('jwt');
-      console.log('jwt found');
-      checkToken(jwt)
+      const token = localStorage.getItem('jwt');
+      setJwt(token);
+      checkToken(token)
         .then(data => {
           setLoggedIn(true);
-          console.log(data.data.email);
-          setEmail(data.data.email);
+          setEmail(data.email);
           history.push('/');
         })
         .then(()=>{
@@ -165,48 +167,49 @@ function App(props) {
 
   // A Call for Initial Cards
   React.useEffect(() => {
-    api.getInitialCards()
+    api.getInitialCards(jwt)
       .then((res) => {
-        setCards(res);
+        setCards(res.data);
       })
       .catch(err => {
         console.log((`Cards could not be delivered as dialed: ${ err }`))
       })
-  }, [])
+  }, [jwt])
 
   // A Call for Initial User Info
   React.useEffect(()=>{
-    api.getUserInfo()
+    api.getUserInfo(jwt)
       .then((res) => {
         setCurrentUser(res);
       })
       .catch(err => {
         console.log((`User info not received properly: ${ err }`));
       })
-  }, [])
+  }, [jwt])
 
 
   // A Set of Calls for Handling Likes
   function handleCardLike(card) {
     // Check one more time if this card was already liked
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some(i => i === currentUser._id);
 
     // Send a request to the API and getting the updated card data
     function afterBoolean(newCard) {
-      setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
+      console.log(newCard);
+      setCards((cards) => cards.map((c) => c._id === newCard._id ? newCard : c));
     }
 
     function handleFalse(id) {
-      api.updateLikeTrue(id)
-        .then((newCard) => { afterBoolean(newCard) })
+      api.updateLikeTrue(jwt, id)
+        .then((newCard) => {console.log(newCard); afterBoolean(newCard.card) })
         .catch(err => {
           console.log((`Like Functions Broken: ${ err }`))
         })
     }
 
     function handleTrue(id) {
-      api.updateLikeFalse(id)
-        .then((newCard) => {afterBoolean(newCard)})
+      api.updateLikeFalse(jwt, id)
+        .then((newCard) => {console.log(newCard); afterBoolean(newCard.card)})
         .catch(err => {
           console.log((`Like Functions Broken: ${ err }`))
         })
@@ -217,7 +220,7 @@ function App(props) {
 
   // A Call for Deleting a Card
   function handleCardDelete(){
-    api.deleteCard(forDeletion)
+    api.deleteCard(jwt, forDeletion)
       .then(() => {
         console.log('i did it!');
         setCards((cards) => cards.filter(card => card._id !== forDeletion))

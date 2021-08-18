@@ -7,8 +7,6 @@ import { Link } from 'react-router-dom';
 export default function Main (props) {
 
   const currentUser = React.useContext(CurrentUserContext);
-
-
   return (
     <main>
       <Header>

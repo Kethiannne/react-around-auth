@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://register.nomoreparties.co';
+export const BASE_URL = process.env.NODE_ENV === "production" ? 'https://api.kethianne.students.nomoreparties.site' : 'http://localhost:3000';
 
 function getSuccessfulReturn(res){
   if (res.ok) {
@@ -26,7 +26,6 @@ export const register = (email, password) => {
   })
 };
 
-
 // Logging in / authorization
 export const authorize = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
@@ -40,16 +39,14 @@ export const authorize = (email, password) => {
     return getSuccessfulReturn(res);
   })
   .then((data) => {
-    if (data.token){
-      localStorage.setItem('jwt', data.token);
+    console.log(data);
+    if (data.userToken){
+      localStorage.setItem('jwt', data.userToken);
 
       return data;
     }
   })
 };
-
-
-
 
 // check the user's token
 export const checkToken = (token) => {
