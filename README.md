@@ -15,6 +15,18 @@ All authorization, registration and token requests go through to my RESTful api:
   - Users can edit their information through clicking on their profile image or the edit button near their profile name.
   - Users can add cards to the page with an add button, only the owner of a card can then delete it.
 
+### Technologies
+  - React JS
+  - React Router DOM
+  - Hosting via Google Cloud
+
+### Live Version
+
+https://kethianne-around.students.nomoreparties.site
+
 ### images
-![Image](src/images/screenshots/main page.png)
-![Image](src/images/screenshots/main page.png)
+![Image](src/images/screenshots/log-in.png)
+![Image](src/images/screenshots/main-page.png)
+![Image](src/images/screenshots/new-place.png)
+![Image](src/images/screenshots/avatar-edit.png)
+![Image](src/images/screenshots/profile-edit.png)
