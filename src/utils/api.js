@@ -115,5 +115,5 @@ class Api {
 }
 
 export default new Api({
-  baseURL: process.env.NODE_ENV === "production" ? 'https://api.kethianne.students.nomoreparties.site' : 'http://localhost:3000',
+  baseURL: process.env.NODE_ENV === "production" ? 'https://api.kethianne-around.students.nomoreparties.site' : 'http://localhost:3000',
 });

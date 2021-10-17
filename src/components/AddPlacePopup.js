@@ -12,7 +12,7 @@ export default function AddPlacePopup (props) {
 
   function handleSubmit(evt){
     evt.preventDefault();
-    props.onSubmit({link, name});
+    props.onSubmit({ link, name });
     setName('');
     setLink('');
   }
@@ -23,16 +23,16 @@ export default function AddPlacePopup (props) {
     name='add-form'
     title='New Place'
     saveText='Create'
-    isOpen={props.isOpen}
-    onClose={props.onClose}
-    onSubmit={handleSubmit}
+    isOpen={ props.isOpen }
+    onClose={ props.onClose }
+    onSubmit={ handleSubmit }
     >
     {/* Children Elements */}
-    <input type="text" onChange={handleChange} required value={name || ''}
+    <input type="text" onChange={ handleChange } required value={ name || '' }
         className="form__field add-form__title" placeholder="Title" name="name"
-        minLength={1} maxLength={30}
+        minLength={ 1 } maxLength={ 30 }
     />
-    <input type="url" onChange={handleChange} required value={link || ''}
+    <input type="url" onChange={ handleChange } required value={ link || '' }
       className="form__field add-form__image" placeholder="Image Link" name="link"
     />
   </PopupWithForm>

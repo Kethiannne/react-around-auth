@@ -4,7 +4,7 @@ import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
-import CurrentUserContext from '../contexts/CurrentUserContext'
+import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
@@ -31,7 +31,7 @@ function App(props) {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [email, setEmail] = React.useState('');
-  const [doneChecking, setDoneChecking] = React.useState(false)
+  const [doneChecking, setDoneChecking] = React.useState(false);
   const [jwt, setJwt] = React.useState('');
   const history = props.history;
 
@@ -137,7 +137,7 @@ function App(props) {
 
   function loginAuthorize(email, password) {
     authorize(email, password)
-      .then((data) => {
+      .then(() => {
         setLoggedIn(true);
       })
       .then(() => {
@@ -248,23 +248,50 @@ function App(props) {
             email={ email }
           />
           <Route path='/signup' isloggedIn={ loggedIn } >
-            <Register registerUser={ registerUser }
+            <Register
+              registerUser={ registerUser }
             />
           </Route>
           <Route path='/signin' isloggedIn={ loggedIn }>
-            <Login setLoggedIn={ setLoggedIn } onSubmit={ loginAuthorize } />
+            <Login
+              setLoggedIn={ setLoggedIn }
+              onSubmit={ loginAuthorize }
+            />
           </Route>
           <Route path='/*'>
             { loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" /> }
           </Route>
         </Switch>
         <Footer />
-        <ImagePopup onClose={ closeAllPopups } card={ selectedCard } />
-        <AddPlacePopup isOpen={ isAddOpen } onClose={ closeAllPopups } onSubmit={ handleAddPlaceSubmit } />
-        <EditAvatarPopup isOpen={ isAvaterOpen } onClose={ closeAllPopups } onSubmit={ handleUpdateAvatar } />
-        <EditProfilePopup isOpen={ isEditOpen } onClose={ closeAllPopups } onSubmit={ handleUpdateUser } />
-        <DeleteCardConfirmPopup isOpen={ isDeleteOpen } onClose={ closeAllPopups } onSubmit={ handleCardDelete } />
-        <InfoToolTip isOpen={ isToolTipOpen } didSucceed={ didSucceed } onClose={ closeAllPopups } />
+        <ImagePopup
+          onClose={ closeAllPopups }
+          card={ selectedCard }
+        />
+        <AddPlacePopup
+          isOpen={ isAddOpen }
+          onClose={ closeAllPopups }
+          onSubmit={ handleAddPlaceSubmit }
+        />
+        <EditAvatarPopup
+          isOpen={ isAvaterOpen }
+          onClose={ closeAllPopups }
+          onSubmit={ handleUpdateAvatar }
+        />
+        <EditProfilePopup
+          isOpen={ isEditOpen }
+          onClose={ closeAllPopups }
+          onSubmit={ handleUpdateUser }
+        />
+        <DeleteCardConfirmPopup
+          isOpen={ isDeleteOpen }
+          onClose={ closeAllPopups }
+          onSubmit={ handleCardDelete }
+        />
+        <InfoToolTip
+          isOpen={ isToolTipOpen }
+          didSucceed={ didSucceed }
+          onClose={ closeAllPopups }
+        />
       </div>
     </CurrentUserContext.Provider>
   );

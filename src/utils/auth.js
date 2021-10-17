@@ -1,4 +1,4 @@
-export const BASE_URL = process.env.NODE_ENV === "production" ? 'https://api.kethianne.students.nomoreparties.site' : 'http://localhost:3000';
+export const BASE_URL = process.env.NODE_ENV === "production" ? 'https://api.kethianne-around.students.nomoreparties.site' : 'http://localhost:3000';
 
 function getSuccessfulReturn(res){
   if (res.ok) {
