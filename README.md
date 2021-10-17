@@ -16,3 +16,4 @@ All authorization, registration and token requests go through to my RESTful api:
   - Users can add cards to the page with an add button, only the owner of a card can then delete it.
 
 ### images
+![Image](src/images/screenshots/main page.png)
