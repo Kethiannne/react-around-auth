@@ -24,6 +24,10 @@ All authorization, registration and token requests go through to my RESTful api:
 
 https://kethianne-around.students.nomoreparties.site
 
+### Future Improvements
+  - Smoother integration of cards so a refresh is not needed before deletion
+  - card like button fix: prevent like button from re-rendering thw whole card to not reset the state of the card as a whole
+
 ### images
 ![Image](src/images/screenshots/log-in.png)
 ![Image](src/images/screenshots/main-page.png)
